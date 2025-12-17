@@ -277,7 +277,7 @@ scan_phantoms() {
 
     debug "Starting scan of $total_notifications notifications"
 
-    for i in $(seq 0 $((total_notifications - 1))); do
+    for ((i = 0; i < total_notifications; i++)); do
         current=$((current + 1))
 
         # Get notification by index
