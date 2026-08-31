@@ -16,11 +16,10 @@ echo "Running tests with coverage analysis..."
 
 # Run BATS tests through kcov
 kcov \
-    --include-pattern="$(pwd)/gh-gonest" \
-    "$COVERAGE_DIR" \
-    bats tests/gh-gonest.bats
+  --include-pattern="$(pwd)/gh-gonest" \
+  "$COVERAGE_DIR" \
+  bats tests/gh-gonest.bats
 
 echo ""
 echo "Coverage report generated in: $COVERAGE_DIR"
 echo "Open $COVERAGE_DIR/index.html in a browser to view the report"
-

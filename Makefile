@@ -2,13 +2,14 @@
 # Makefile for gh-gonest GitHub CLI extension
 ###############################################################################
 
-.PHONY: clean coverage help install lint setup test
+.PHONY: clean coverage fmt help install lint setup test
 
 # Default target
 help:
 	@echo "Available targets:"
 	@echo "  clean      - Clean temporary files"
 	@echo "  coverage   - Run tests with coverage analysis"
+	@echo "  fmt        - Check shell script formatting"
 	@echo "  help       - Show this help message and exit"
 	@echo "  install    - Install as gh extension locally"
 	@echo "  lint       - Run shellcheck linting"
@@ -42,6 +43,11 @@ install_kcov:
 	@sudo apt-get install -y cmake g++ libdw-dev libelf-dev libcurl4-openssl-dev
 	@cd /tmp && git clone https://github.com/SimonKagstrom/kcov.git && \
 	cd kcov && mkdir build && cd build && cmake .. && make && sudo make install && cd /tmp && rm -rf kcov
+
+# Check shell formatting
+fmt:
+	@echo "Checking shell formatting..."
+	@shfmt -d gh-gonest tests/bin/gh tests/coverage.sh
 
 # Lint bash scripts
 lint:

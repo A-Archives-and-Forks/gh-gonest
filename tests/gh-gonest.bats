@@ -71,7 +71,7 @@ teardown() {
 }
 
 @test "check for missing GitHub CLI detection" {
-     # Override the command builtin to make 'command -v gh' fail
+    # Override the command builtin to make 'command -v gh' fail
     run bash -c '
         command() {
             if [[ "$1" == "-v" && "$2" == "gh" ]]; then

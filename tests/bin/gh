@@ -4,39 +4,38 @@
 ###############################################################################
 
 case "$1 $2" in
-  "api user")
-    exit "${GH_API_USER_EXIT:-0}"
-    ;;
-  "api notifications"*)
-    if [[ -n "$GH_NOTIFICATIONS" && -f "$GH_NOTIFICATIONS" ]]; then
-      cat "$GH_NOTIFICATIONS"
+"api user")
+  exit "${GH_API_USER_EXIT:-0}"
+  ;;
+"api notifications"*)
+  if [[ -n "$GH_NOTIFICATIONS" && -f "$GH_NOTIFICATIONS" ]]; then
+    cat "$GH_NOTIFICATIONS"
+  else
+    echo "[]"
+  fi
+  exit "${GH_API_EXIT:-0}"
+  ;;
+"api repos/"*)
+  repo=$(echo "$*" | grep -o 'repos/[^[:space:]]*' | sed 's|repos/||')
+  case "$repo" in
+  "phantom/"* | "deleted/"* | "ghost/"*) exit 1 ;;
+  *) exit 0 ;;
+  esac
+  ;;
+"api --method"*)
+  if [[ "$*" =~ "--method PATCH" ]]; then
+    exit "${GH_API_PATCH_EXIT:-0}"
+  elif [[ "$*" =~ "--method DELETE" ]]; then
+    if [[ "$*" =~ "/subscription" ]]; then
+      exit "${GH_API_SUBSCRIPTION_DELETE_EXIT:-0}"
     else
-      echo "[]"
+      exit "${GH_API_DELETE_EXIT:-0}"
     fi
+  else
     exit "${GH_API_EXIT:-0}"
-    ;;
-  "api repos/"*)
-    repo=$(echo "$*" | grep -o 'repos/[^[:space:]]*' | sed 's|repos/||')
-    case "$repo" in
-      "phantom/"*|"deleted/"*|"ghost/"*) exit 1 ;;
-      *) exit 0 ;;
-    esac
-    ;;
-  "api --method"*)
-    if [[ "$*" =~ "--method PATCH" ]]; then
-      exit "${GH_API_PATCH_EXIT:-0}"
-    elif [[ "$*" =~ "--method DELETE" ]]; then
-      if [[ "$*" =~ "/subscription" ]]; then
-        exit "${GH_API_SUBSCRIPTION_DELETE_EXIT:-0}"
-      else
-        exit "${GH_API_DELETE_EXIT:-0}"
-      fi
-    else
-      exit "${GH_API_EXIT:-0}"
-    fi
-    ;;
-  *)
-    exit 0
-    ;;
+  fi
+  ;;
+*)
+  exit 0
+  ;;
 esac
-
